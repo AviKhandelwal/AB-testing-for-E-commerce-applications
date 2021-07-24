@@ -1,11 +1,11 @@
-## Exploring the data of users table - 
+Exploring the data of users table - 
 
-#### SQL query-
+**SQL query**-
 SELECT *
 FROM dsv1069.users
 LIMIT 10
 
-#### Result
+Result-
 
 created_at		      deleted_at	email_address			          first_name	  id	  last_name	  merged_at	parent_user_id
 2014-12-20 07:07:45			        ArataHopper@earthlink.info	Arata		    51590	  Hopper		
