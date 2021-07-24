@@ -68,7 +68,7 @@ Events table stimulates a copy of a live production table. It is more like a str
 4.	Platform through which event took place (mobile/computer etc.)
 5.	Parameter name and value giving further details about the event (this is discussed further in data exploration)
 
-### View items Table
+### View_items Table
 ![image](https://user-images.githubusercontent.com/71550473/126880188-9892ab6e-0c4c-4db1-a59b-bc00dc1bf772.png)
 
 View item table will be giving information about the viewing details of the item like –
