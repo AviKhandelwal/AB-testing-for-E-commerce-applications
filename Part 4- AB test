@@ -1,5 +1,3 @@
-AB TESTING
-
 1. Find out the total people who participated in AB testing?
 
 SELECT COUNT(DISTINCT user_id)
