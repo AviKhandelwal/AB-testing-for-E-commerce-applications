@@ -1,30 +1,4 @@
---------------Answering Data questions-----------------
-
-
-Q2. Prepare a list of users and the corresponding items they purchased?
-
-SELECT id,first_name,last_name,item_name,item_id
-
-FROM dsv1069.users u
-
-JOIN dsv1069.orders o 
-  ON u.id = o.user_id
-  
-ORDER BY u.id ASC
-
-id	first_name	last_name	item_name				item_id
-17	Youseff		Powell		digital device warmer			3266
-17	Youseff		Powell		reflective device storage_unit		3964
-17	Youseff		Powell		extra-strength device charger		3219
-25	Logan		Petrov		widget charger				1376
-25	Logan		Petrov		extra-strength widget charger		2105
-63	S		Gonzalez	organic contraption			2818
-63	S		Gonzalez	rechargable contraption how-to-manual	1900
-63	S		Gonzalez	aerodynamic contraption cleaner		2140
-65	Ruth		Miller		gadget opener				2342
-69	Mosi		Petrov		widget cleaner				375
-
-Q1. Create a view_item table from events table with suitable columns
+1. Create a view_item table from events table with suitable columns
 
 SELECT event_id,
 	event_time,
@@ -67,7 +41,7 @@ Result -
 	0003078ab0964a72b93e32db30929567	2016-03-30 17:35:16	111792	web		2782	promo_email_click
 
 
-Q2. Can you find out on which days total customer views for all the items on ecommerce site exceeded 100?
+2. Finding out on which days total customer views for all the items on ecommerce site exceeded 100?
  (maybe this information can be used to analyse the effects of promotions/marketing of products)
 
 SELECT DATE(event_time) AS date,
@@ -90,7 +64,7 @@ date			count
 2014-07-10 00:00:00	110
 2014-07-18 00:00:00	103
 
-Q3. Make a list of customers and the items they purchased
+3. Make a list of customers and the items they purchased
 
 SELECT user_id,
       first_name,
@@ -119,7 +93,7 @@ user_id	first_name	last_name	email_address			item_id	item_name			item_category	p
 196712	Grace		Kumar		Grace_Kumar@gmail.com		2256	matte contraption storage_unit	contraption	781.25	2017-10-07 20:35:09
 
 
-Q4.  create a table that has a column for the date, the number of users created, the number of users deleted and the number of users merged that day.
+4.  create a table that has a column for the date, the number of users created, the number of users deleted and the number of users merged that day.
 
 SELECT new.day,
   new.new_added_users,
@@ -171,7 +145,7 @@ day			new_added_users	deleted_users	merged_users	net_added_users
 2013-03-07 00:00:00	2			0		0	2
 
 
-Q5. Make a table of date and the corresponding orders made on that day
+5. Make a table of date and the corresponding orders made on that day
 
 SELECT dates_rollup.date,
       COALESCE(orders,0) AS orders,
@@ -204,7 +178,7 @@ LEFT OUTER JOIN
 2014-01-14 00:00:00	6	13
 2014-01-15 00:00:00	7	19
 
-Q6. Creating a weekly rolling orders table, by performing any aggregation steps and naming your columns appropriately.
+6. Creating a weekly rolling orders table, by performing any aggregation steps and naming your columns appropriately.
 
 SELECT dates_rollup.date,
        COALESCE(SUM(orders), 0) AS total_orders,
@@ -244,7 +218,7 @@ limit 15;
 2018-05-19 00:00:00	102		240				7		14.571428571428571	34.285714285714285
 2018-05-18 00:00:00	100		241				7		14.285714285714286	34.42857142857143
 
-Q7. We need to send a promo email, we would send users an email about the item they viewed most recently and haven't bought yet.
+7. We need to send a promo email, we would send users an email about the item they viewed most recently and haven't bought yet.
 
 SELECT COALESCE(users.parent_user_id, users.id) AS user_id,
        users.email_address,
