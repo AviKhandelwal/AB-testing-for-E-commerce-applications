@@ -1,6 +1,6 @@
 --------------Data Exploration of users table-----------------
 
-Q1. Explore the data of users table -
+Explore the data of users table -
 
 SELECT *
 FROM dsv1069.users
