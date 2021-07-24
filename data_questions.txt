@@ -1,0 +1,289 @@
+--------------Answering Data questions-----------------
+
+
+Q2. Prepare a list of users and the corresponding items they purchased?
+
+SELECT id,first_name,last_name,item_name,item_id
+
+FROM dsv1069.users u
+
+JOIN dsv1069.orders o 
+  ON u.id = o.user_id
+  
+ORDER BY u.id ASC
+
+id	first_name	last_name	item_name				item_id
+17	Youseff		Powell		digital device warmer			3266
+17	Youseff		Powell		reflective device storage_unit		3964
+17	Youseff		Powell		extra-strength device charger		3219
+25	Logan		Petrov		widget charger				1376
+25	Logan		Petrov		extra-strength widget charger		2105
+63	S		Gonzalez	organic contraption			2818
+63	S		Gonzalez	rechargable contraption how-to-manual	1900
+63	S		Gonzalez	aerodynamic contraption cleaner		2140
+65	Ruth		Miller		gadget opener				2342
+69	Mosi		Petrov		widget cleaner				375
+
+Q1. Create a view_item table from events table with suitable columns
+
+SELECT event_id,
+	event_time,
+	user_id,
+	platform,
+	MAX(CASE 
+			WHEN parameter_name = 'item_id'
+				THEN CAST(parameter_value AS INT)
+			ELSE NULL
+			END) AS item_id,
+	MAX(CASE 
+			WHEN parameter_name = 'referrer'
+				THEN parameter_value
+			ELSE NULL
+			END) AS referrer
+
+FROM dsv1069.events
+
+WHERE event_name = 'view_item'
+
+GROUP BY event_id,
+	event_time,
+	user_id,
+	platform
+
+ORDER BY event_id;
+
+Result - 
+
+	event_id				event_time		user_id	platform	item_id	referrer
+	00009c5122b04bc09d7677b5bae641c8	2017-10-06 14:33:32	198519	mobile web	3241	shopping_cart
+	0000ac00b5b741a8928a911dc3448cb2	2014-07-25 22:40:56	31861	web		2260	home
+	00015a1e375441328232db147a6bc34e	2018-04-07 02:14:08	283465	web		2889	home
+	0001d177b6ad410b8587fbea553810c8	2015-10-15 04:04:24	67361	android		3014	item_page
+	0001fd08f7e745f2903a4a34a046bcce	2017-11-09 02:51:54	237955	web		1424	google_search
+	00020d658efc4e7498d42c2072c3e72d	2015-02-27 01:05:10	57053	android		1126	home
+	0002a162383c44ec864305e4a9fd4193	2016-08-28 12:09:37	145090	iOS		2430	home
+	0002b1150042493c856b90abfc00ce2e	2017-10-31 20:56:57	239551	web		3675	shopping_cart
+	0002c6e5bf2145759b5aa8f2a5e2bfbb	2017-07-07 08:59:10	206123	android		511	item_page
+	0003078ab0964a72b93e32db30929567	2016-03-30 17:35:16	111792	web		2782	promo_email_click
+
+
+Q2. Can you find out on which days total customer views for all the items on ecommerce site exceeded 100?
+ (maybe this information can be used to analyse the effects of promotions/marketing of products)
+
+SELECT DATE(event_time) AS date,
+      COUNT(DISTINCT(event_id))
+    FROM dsv1069.events
+    GROUP BY DATE(event_time),event_name
+    HAVING event_name = 'view_item' AND
+          COUNT(DISTINCT(event_id)) > 100
+    ORDER BY date
+
+date			count
+2014-05-22 00:00:00	101
+2014-05-23 00:00:00	102
+2014-06-01 00:00:00	116
+2014-06-18 00:00:00	104
+2014-06-20 00:00:00	108
+2014-06-22 00:00:00	102
+2014-06-30 00:00:00	116
+2014-07-01 00:00:00	118
+2014-07-10 00:00:00	110
+2014-07-18 00:00:00	103
+
+Q3. Make a list of customers and the items they purchased
+
+SELECT user_id,
+      first_name,
+      last_name,
+      email_address,
+      item_id,
+      item_name,
+      item_category,
+      price,
+      orders.paid_at
+FROM dsv1069.orders
+  JOIN dsv1069.users
+  ON orders.user_id = users.id
+limit 10
+
+user_id	first_name	last_name	email_address			item_id	item_name			item_category	price	paid_at
+158891	Riya		Gruber		Riya_Gruber1974@mail.net	920	fuzzy apparatus opener		apparatus	150	2017-03-19 13:10:44
+158891	Riya		Gruber		Riya_Gruber1974@mail.net	85	reflective apparatus		apparatus	390	2017-03-19 13:10:44
+158891	Riya		Gruber		Riya_Gruber1974@mail.net	93	reflective apparatus wrapper	apparatus	156	2017-03-19 13:10:44
+158891	Riya		Gruber		Riya_Gruber1974@mail.net	2720	rechargable apparatus		apparatus	390	2017-03-19 13:10:44
+93994	S		Novak		SNovak1966@mail.com		3629	digital apparatus opener	apparatus	165	2016-02-20 15:08:49
+93994	S		Novak		SNovak1966@mail.com		3360	apparatus opener		apparatus	150	2016-02-20 15:08:49
+64712	D		Powell		D_Powell1991@yahoo.edu		137	organic dongle refill		dongle		36	2015-09-07 01:07:35
+196712	Grace		Kumar		Grace_Kumar@gmail.com		1730	matte contraption		contraption	312.5	2017-10-07 20:35:09
+196712	Grace		Kumar		Grace_Kumar@gmail.com		3376	rechargable contraption		contraption	325	2017-10-07 20:35:09
+196712	Grace		Kumar		Grace_Kumar@gmail.com		2256	matte contraption storage_unit	contraption	781.25	2017-10-07 20:35:09
+
+
+Q4.  create a table that has a column for the date, the number of users created, the number of users deleted and the number of users merged that day.
+
+SELECT new.day,
+  new.new_added_users,
+  COALESCE(deleted.deleted_users, 0) AS deleted_users,
+  COALESCE(merged.merged_users, 0) AS merged_users,
+  (new.new_added_users - COALESCE(deleted.deleted_users, 0) - COALESCE(merged.merged_users, 0)) 
+    AS net_added_users
+FROM (SELECT DATE(created_at) AS day,
+    COUNT(id) AS new_added_users
+  FROM dsv1069.users
+  GROUP BY day) new
+  
+LEFT JOIN 
+
+  (SELECT DATE(created_at) AS day,
+    COUNT(id) AS deleted_users
+  FROM dsv1069.users
+  WHERE deleted_at IS NOT NULL
+  GROUP BY day) deleted
+  ON deleted.day = new.day
+  
+LEFT JOIN 
+
+  (SELECT DATE(merged_at) AS day,
+    COUNT(id) AS merged_users
+  FROM dsv1069.users
+  WHERE id <> parent_user_id
+  AND parent_user_id IS NOT NULL
+  GROUP BY day) merged
+ON merged.day = new.day
+
+limit 15;
+
+day			new_added_users	deleted_users	merged_users	net_added_users
+2013-02-18 00:00:00	1			0		0	1
+2013-02-20 00:00:00	1			0		0	1
+2013-02-21 00:00:00	1			0		0	1
+2013-02-22 00:00:00	1			0		0	1
+2013-02-23 00:00:00	1			0		0	1
+2013-02-25 00:00:00	1			1		0	0
+2013-02-26 00:00:00	2			0		0	2
+2013-02-27 00:00:00	1			0		0	1
+2013-03-01 00:00:00	3			0		0	3
+2013-03-02 00:00:00	2			0		0	2
+2013-03-03 00:00:00	3			0		0	3
+2013-03-04 00:00:00	1			0		0	1
+2013-03-05 00:00:00	2			0		0	2
+2013-03-06 00:00:00	3			0		0	3
+2013-03-07 00:00:00	2			0		0	2
+
+
+Q5. Make a table of date and the corresponding orders made on that day
+
+SELECT dates_rollup.date,
+      COALESCE(orders,0) AS orders,
+      COALESCE(line_items,0) AS line_items
+FROM dsv1069.dates_rollup
+LEFT OUTER JOIN
+    (SELECT DATE(paid_at) AS day,
+            COUNT(DISTINCT invoice_id) AS orders,
+            COUNT(DISTINCT line_item_id) AS line_items
+   FROM dsv1069.orders
+   GROUP BY day) daily_orders
+  ON daily_orders.day = dates_rollup.date;
+  
+
+	date		orders	line_items
+
+2014-01-01 00:00:00	2	4
+2014-01-02 00:00:00	6	15
+2014-01-03 00:00:00	4	10
+2014-01-04 00:00:00	3	7
+2014-01-05 00:00:00	6	11
+2014-01-06 00:00:00	6	16
+2014-01-07 00:00:00	3	11
+2014-01-08 00:00:00	3	8
+2014-01-09 00:00:00	2	5
+2014-01-10 00:00:00	4	9
+2014-01-11 00:00:00	3	5
+2014-01-12 00:00:00	2	7
+2014-01-13 00:00:00	9	19
+2014-01-14 00:00:00	6	13
+2014-01-15 00:00:00	7	19
+
+Q6. Creating a weekly rolling orders table, by performing any aggregation steps and naming your columns appropriately.
+
+SELECT dates_rollup.date,
+       COALESCE(SUM(orders), 0) AS total_orders,
+       COALESCE(SUM(items_ordered), 0) AS total_items_ordered,
+       COUNT(*) AS total_ordering_days, -- Number of days in 7 day window on which orders were placed, if it is 2 it means 
+                                        -- in a 7 day window, orders were placed on only 2 days
+       COALESCE(AVG(orders), 0) AS avg_orders,
+       COALESCE(AVG(items_ordered), 0) AS avg_items_ordered
+       
+FROM dsv1069.dates_rollup
+LEFT OUTER JOIN
+  (SELECT DATE(orders.paid_at) AS day,
+          COUNT(DISTINCT invoice_id) AS orders,
+          COUNT(DISTINCT line_item_id) AS items_ordered
+   FROM dsv1069.orders
+   GROUP BY DATE(orders.paid_at)) daily_orders
+  ON dates_rollup.date >= daily_orders.day
+  AND dates_rollup.d7_ago < daily_orders.day
+GROUP BY dates_rollup.date
+ORDER BY dates_rollup.date DESC
+limit 15;
+
+	date		total_orders	total_items_ordered	total_ordering_days	avg_orders		avg_items_ordered
+2018-06-01 00:00:00	104		250				7		14.857142857142858	35.714285714285715
+2018-05-31 00:00:00	114		271				7		16.285714285714285	38.714285714285715
+2018-05-30 00:00:00	107		255				7		15.285714285714286	36.42857142857143
+2018-05-29 00:00:00	109		261				7		15.571428571428571	37.285714285714285
+2018-05-28 00:00:00	108		266				7		15.428571428571429	38
+2018-05-27 00:00:00	112		272				7		16			38.857142857142854
+2018-05-26 00:00:00	115		283				7		16.428571428571427	40.42857142857143
+2018-05-25 00:00:00	119		287				7		17			41
+2018-05-24 00:00:00	109		271				7		15.571428571428571	38.714285714285715
+2018-05-23 00:00:00	115		288				7		16.428571428571427	41.142857142857146
+2018-05-22 00:00:00	124		313				7		17.714285714285715	44.714285714285715
+2018-05-21 00:00:00	120		295				7		17.142857142857142	42.142857142857146
+2018-05-20 00:00:00	115		279				7		16.428571428571427	39.857142857142854
+2018-05-19 00:00:00	102		240				7		14.571428571428571	34.285714285714285
+2018-05-18 00:00:00	100		241				7		14.285714285714286	34.42857142857143
+
+Q7. We need to send a promo email, we would send users an email about the item they viewed most recently and haven't bought yet.
+
+SELECT COALESCE(users.parent_user_id, users.id) AS user_id,
+       users.email_address,
+       items.id AS item_id,
+       items.name AS item_name,
+       items.category AS item_category
+FROM
+    ( SELECT user_id,
+             item_id,
+             event_time,
+             ROW_NUMBER() OVER (PARTITION BY user_id
+                                ORDER BY event_time DESC) AS view_number
+   FROM dsv1069.view_item_events
+   WHERE event_time > '2017-01-01' ) recent_views
+JOIN dsv1069.users
+  ON user_id = recent_views.user_id
+JOIN dsv1069.items
+  ON items.id = recent_views.item_id
+LEFT OUTER JOIN dsv1069.orders
+  ON orders.item_id = recent_views.item_id
+  AND orders.user_id = recent_views.user_id
+WHERE view_number = 1
+  AND users.deleted_at IS NOT NULL
+  AND orders.item_id IS NULL
+limit 15;
+
+user_id	email_address			item_id		item_name		item_category
+220461	JSargsyan@gmail.biz		755	extra-strength device wrapper	device
+185769	Mateo_Anand@earthlink.edu	755	extra-strength device wrapper	device
+124855	Maria_Ortiz@earthlink.com	755	extra-strength device wrapper	device
+80970	SunitaPetrov1979@mail.biz	755	extra-strength device wrapper	device
+80892	Seo-yunRodriquez@gmail.edu	755	extra-strength device wrapper	device
+137121	D_Chen1998@gmail.edu		755	extra-strength device wrapper	device
+130103	H_Weber1972@gmail.org		755	extra-strength device wrapper	device
+32870	Khalid_Khoury@inbox.com		755	extra-strength device wrapper	device
+143842	ArataWatanabe1959@yahoo.com	755	extra-strength device wrapper	device
+60605	Grace_Agarwal@outlook.com	755	extra-strength device wrapper	device
+60427	LuisHuang@gmail.biz		755	extra-strength device wrapper	device
+217902	PriyaAmin@outlook.net		755	extra-strength device wrapper	device
+256812	Victoria_Miller1978@outlook.com	755	extra-strength device wrapper	device
+49263	GraceBrown1958@outlook.com	755	extra-strength device wrapper	device
+242535	Reem_Ahmad1984@outlook.com	755	extra-strength device wrapper	device
