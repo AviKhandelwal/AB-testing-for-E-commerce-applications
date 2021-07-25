@@ -12,7 +12,6 @@ and the treatment group is where customers will be shown the new variant.
 3. Their activity is monitored and a null hyposthesis is adopted that states the new variant does not significantly change the user behavior, so the problem boils down to 
 the one in hypothesis testing where we reject or fail to reject the null hypothesis.
 
-
 Some popular AB testing case studies-
 
 A. User welcome email
@@ -76,17 +75,17 @@ GROUP BY parameter_value,
 ORDER BY day
 limit 10;
 
-test_id		day		event_rows
-4	2013-05-25 00:00:00	       1128
-4	2013-05-26 00:00:00	       1023
-4	2013-05-27 00:00:00	       1088
-4	2013-05-28 00:00:00	       1114
-4	2013-05-29 00:00:00	       1067
-4	2013-05-30 00:00:00	       1072
-4	2013-05-31 00:00:00	       1083
-4	2013-06-01 00:00:00	       1116
-4	2013-06-02 00:00:00  	1073
-4	2013-06-03 00:00:00  	1070
+test_id		     day		              event_rows
+4	     2013-05-25 00:00:00	       1128
+4	     2013-05-26 00:00:00	       1023
+4	     2013-05-27 00:00:00	       1088
+4	     2013-05-28 00:00:00	       1114
+4	     2013-05-29 00:00:00	       1067
+4	     2013-05-30 00:00:00	       1072
+4	     2013-05-31 00:00:00	       1083
+4	     2013-06-01 00:00:00	       1116
+4	     2013-06-02 00:00:00  	     1073
+4	     2013-06-03 00:00:00  	     1070
 
 4. Finding out the start and end dates of the AB tests and see if any of them coincide?
 
@@ -107,11 +106,11 @@ ORDER BY day) AS running_tests
 GROUP BY test_id
 ORDER BY event_started ASC
 
-test_id	event_started		event_ended	       total_participation
-4	2013-05-25 00:00:00	       2013-06-04 00:00:00	11890
-5	2013-09-02 00:00:00	       2014-05-21 00:00:00	68563
-6	2014-03-31 00:00:00	       2014-06-29 00:00:00	43390
-7	2016-09-16 00:00:00	       2016-12-04 00:00:00	38647
+test_id	    event_started		            event_ended	       total_participation
+4	      2013-05-25 00:00:00	       2013-06-04 00:00:00	        11890
+5	      2013-09-02 00:00:00	       2014-05-21 00:00:00	        68563
+6	      2014-03-31 00:00:00	       2014-06-29 00:00:00	        43390
+7	      2016-09-16 00:00:00	       2016-12-04 00:00:00	        38647
 
 only tests 5,6 coincide whereas tests 4 and 7 run individually
 
@@ -142,17 +141,17 @@ GROUP BY event_id,
 ORDER BY event_id
 limit 10;
 
-event_id				event_time		user_id	platform	test_id	test_assignment
-00003d71b9cb41469c05af608a6d2145	2014-04-28 15:23:00	147689	       server		5	              1
-00012e89e2f54bf99180dde02c63e4ad	2016-11-06 15:23:09	225112	       server		7	              1
-00012e8f6da84f33ab9ff53901f5a2f3	2014-04-10 15:23:05	130289	       server		6	              1
-00018d8326b64ce7b016b90282b0d81e	2014-05-13 15:23:05	86365	       server		6	              0
-0001abcf9b824630856a246877a6ef4b	2013-10-19 15:23:00	51995	       server		5	              1
-00023fa0f29e4aa5b5d566cd65dadb4a	2013-10-25 15:23:00	177068	       server		5	              1
-00030a7b59e542298ece94b022d7e177	2014-04-18 15:23:05	52199	       server		6	              1
-000349ab83b147bdaf444815e030f172	2014-05-22 15:23:05	190289	       server		6	              1
-00039923fa2944efabf2b595f3a4b092	2014-05-24 15:23:05	212158	       server		6	              1
-0003cf55eeaf43c59365366a12e66a57	2016-09-23 15:23:09	267952	       server		7	              0
+event_id				                     event_time		        user_id	  platform	test_id	test_assignment
+00003d71b9cb41469c05af608a6d2145	2014-04-28 15:23:00	147689	     server		  5	              1
+00012e89e2f54bf99180dde02c63e4ad	2016-11-06 15:23:09	225112	     server		  7	              1
+00012e8f6da84f33ab9ff53901f5a2f3	2014-04-10 15:23:05	130289	     server		  6	              1
+00018d8326b64ce7b016b90282b0d81e	2014-05-13 15:23:05	86365	      server		  6	              0
+0001abcf9b824630856a246877a6ef4b	2013-10-19 15:23:00	51995	      server		  5	              1
+00023fa0f29e4aa5b5d566cd65dadb4a	2013-10-25 15:23:00	177068	     server		  5	              1
+00030a7b59e542298ece94b022d7e177	2014-04-18 15:23:05	52199	      server		  6	              1
+000349ab83b147bdaf444815e030f172	2014-05-22 15:23:05	190289	     server		  6	              1
+00039923fa2944efabf2b595f3a4b092	2014-05-24 15:23:05	212158	     server		  6	              1
+0003cf55eeaf43c59365366a12e66a57	2016-09-23 15:23:09	267952	     server		  7	              0
        
 
 6. Since tests 5 and 6 are coinciding, check whether any user is part of the treatment group for both tests, if yes then how many?
@@ -228,6 +227,41 @@ assignments	count
 1		43086
 2		6380
 
+10. Finding out how many users participated in each AB test as part of control and treatment group
+
+SELECT test_id,
+       test_assignment,
+       COUNT(DISTINCT user_id)
+FROM
+ (SELECT event_id,
+             event_time,
+             user_id,
+             MAX(CASE
+                     WHEN parameter_name = 'test_id' THEN CAST(parameter_value AS INT)
+                     ELSE NULL
+                 END) AS test_id,
+             MAX(CASE
+                     WHEN parameter_name = 'test_assignment' THEN CAST(parameter_value AS INT)
+                     ELSE NULL
+                 END) AS test_assignment
+      FROM dsv1069.events
+      GROUP BY event_id,
+               event_time,
+               user_id
+      ORDER BY event_id) assignments
+GROUP BY test_id,
+test_assignment 
+HAVING test_id IS NOT NULL
+
+test_id	test_assignment	count
+4	           0	          7210
+4	           1	          4680
+5	           0	          34420
+5	           1	          34143
+6	           0	          21687
+6	           1	          21703
+7	           0	          19376
+7	           1	          19271
 
 7. Compute a metric that measures whether a user created an order after their test assignment
 
@@ -263,36 +297,36 @@ GROUP BY test_events.test_id,
 limit 15;
 
 test_id	test_assignment		user_id		orders_after_assignment_binary
-6		1		              193270			1
-6		0		              78468			0
-5		1		              186989			0
-5		1		              243459			0
-7		0		              191680			0
-5		0		              52717			0
-5		0		              167261			1
-7		0		              219682			0
-7		0		              275208			0
-6		1		              196521			0
-4		0		              34611			1
-7		1		              208839			1
-6		1		              165912			0
-7		0		              262305			0
-5		1		              215646			1
-
-8. Creating a new item view user_level metric with total views and views within 30 days 
+6		           1		         193270			1
+6		           0		         78468			 0
+5		           1		         186989			0
+5		           1		         243459			0
+7		           0		         191680			0
+5		           0		         52717			 0
+5		           0		         167261			1
+7		           0		         219682			0
+7		           0		         275208			0
+6		           1		         196521			0
+4		           0		         34611			 1
+7		           1		         208839			1
+6		           1		         165912			0
+7		           0		         262305			0
+5		           1		         215646			1
+           
+8. Creating a new item view user_level binary metric.
 
 SELECT assignments.user_id,
        assignments.test_id,
        assignments.test_assignment,
-       COUNT(DISTINCT (CASE
-                  WHEN views.event_time > assignments.event_time THEN views.parameter_value
-                  ELSE NULL
-              END)) AS user_views,
-       COUNT(DISTINCT(CASE
+       MAX(CASE
+                  WHEN views.event_time > assignments.event_time THEN 1
+                  ELSE 0
+              END) AS user_views_binary,
+       MAX(CASE
                   WHEN (views.event_time > assignments.event_time
-                        AND DATE_PART('day', views.event_time - assignments.event_time) <= 30) THEN views.parameter_value
-                  ELSE NULL
-              END)) AS views_binary_30d
+                        AND DATE_PART('day', views.event_time - assignments.event_time) <= 30) THEN 1
+                  ELSE 0
+              END) AS user_views_binary_30d
 FROM
      (SELECT event_id,
              event_time,
@@ -323,40 +357,41 @@ LEFT OUTER JOIN
             assignments.test_id,
             assignments.test_assignment 
       HAVING assignments.test_id IS NOT NULL
-ORDER BY views_binary_30d DESC
+ORDER BY user_views_binary_30d DESC
 LIMIT 10;
 
-user_id	test_id	test_assignment	user_views	views_binary_30d
-26189	           5	              0	           8	              8
-22008	           5	              0	           17	              8
-157156	           7	              0	           10	              8
-163101	           7	              0	           8	              8
-26189	           6	              0	           8	              8
-14221	           5	              1	           8	              8
-23028	           6	              1	           7	              7
-10951	           5	              0	           8	              7
-25326	           6	              0	           7	              7
-11605	           5	              1	           7	              7
-              
+user_id	    test_id	test_assignment	user_views_binary	user_views_binary_30d
+160582	      7	           1	              1	                  1
+22868	       5	           0	              1                  	1
+158836	      7	           0              	1                  	1
+157135	      7           	1	              1	                  1
+20315	       5	           1	              1	                  1
+167321	      7	           0	              1	                  1
+163221	      7	           0	              1	                  1
+22676	       6	           0	              1	                  1
+165351      	7	           0	              1	                  1
+25454	       6	           1	              1	                  1
+
+             
 9. Extending the same analysis from above but now doing it for all treatment groups as whole instead of user_level
 
 SELECT user_level.test_id,
        user_level.test_assignment,
-       SUM(user_views) AS total_views,
-       SUM(views_binary_30d) AS views_within_30_days
+       SUM(user_views) AS total_user_views,
+       SUM(views_binary_30d) AS total_user_views_within_30_days
 FROM
 (SELECT assignments.user_id,
        assignments.test_id,
        assignments.test_assignment,
-       COUNT(DISTINCT (CASE
-                  WHEN views.event_time > assignments.event_time THEN views.parameter_value
-                  ELSE NULL
-              END)) AS user_views,
-       COUNT(DISTINCT(CASE
+       MAX(CASE
+                  WHEN views.event_time > assignments.event_time THEN 1
+                  ELSE 0
+              END) AS user_views,
+       MAX(CASE
                   WHEN (views.event_time > assignments.event_time
-                        AND DATE_PART('day', views.event_time - assignments.event_time) <= 30) THEN views.parameter_value
-                  ELSE NULL
-              END)) AS views_binary_30d
+                        AND DATE_PART('day', views.event_time - assignments.event_time) <= 30) THEN 1
+                  ELSE 0
+              END) AS views_binary_30d
 FROM
      (SELECT event_id,
              event_time,
@@ -390,17 +425,17 @@ LEFT OUTER JOIN
 GROUP BY user_level.test_id,
          user_level.test_assignment
          
-test_id	test_assignment	total_views	views_within_30_days
-4	       0	                 16053	4
-4	       1	                 10362	7
-5	       0	                 75759	506
-5	       1	                 74997	434
-6	       0	                 48324	206
-6	       1	                 47933	192
-7	       0	                 38810	633
-7	       1	                 38180	603
+test_id	test_assignment	 total_user_views	  total_user_views_within_30_days
+4	             0	           4225	                   1
+4	             1	           2709	                   2
+5	             0	           19666                   186
+5	             1	           19781                   177
+6	             0	           12511                   74
+6	             1	           12546                   74
+7	             0	           10290                   245
+7	             1	           10271                   237
+           
 
-10. Conducting AB tests on views within 30 days as 'engagement metrics' and finding out if the new variant creates any statistically significant results
 
 
 
@@ -412,14 +447,10 @@ test_id	test_assignment	total_views	views_within_30_days
 SELECT test_events.test_id,
        test_events.test_assignment,
        test_events.user_id,
-       COUNT(DISTINCT (CASE
-                           WHEN orders.created_at > test_events.event_time THEN invoice_id
-                           ELSE NULL
-                       END)) AS orders_after_assignment,
-       COUNT(DISTINCT (CASE
-                           WHEN orders.created_at > test_events.event_time THEN line_item_id
-                           ELSE NULL
-                       END)) AS items_after_assignment,
+       MAX((CASE
+                           WHEN orders.created_at > test_events.event_time THEN 1
+                           ELSE 0
+                       END)) AS order_after_assignment,
        SUM((CASE
                 WHEN orders.created_at > test_events.event_time THEN price
                 ELSE 0
@@ -449,38 +480,34 @@ GROUP BY test_events.test_id,
 ORDER BY total_revenue DESC
 limit 10;
 
-test_id	test_assignment	user_id	orders_after_assignment	items_after_assignment	total_revenue
-6		       1	       166460		       2			              8		4027.5
-5		       0	       166460		       2			              8		4027.5
-6		       0	       201255		       1			              4		3675
-5		       1	       201255		       1			              4		3675
-7		       1	       201255		       1			              4		3675
-5		       1	       226790		       3			              10		3637.665
-6		       0	       226790		       3			              10		3637.665
-7		       1	       226790		       3			              10		3637.665
-5		       1	       81386		       2			              5		3534
-4		       0	       117506		       1			              3		3306
-              
+
+test_id	test_assignment	user_id	order_after_assignment	total_revenue
+5	            0	         166460	        1	                4027.5
+6	            1	         166460	        1	                4027.5
+5	            1	         201255	        1	                3675
+6	            0	         201255	        1	                3675
+7	            1	         201255	        1	                3675
+7	            1	         226790	        1	                3637.665
+6	            0	         226790	        1	                3637.665
+5	            1	         226790	        1	                3637.665
+5	            1	         81386	         1	                3534
+5	            0	         117506	        1	                3306
+                
 11. Extending the same analysis from above but now doing it for all treatment groups as whole instead of user_level
 
 SELECT user_level.test_id,
       user_level.test_assignment,
       COUNT(DISTINCT user_level.user_id) AS no_of_users,
-      SUM(user_level.orders_after_assignment) AS total_orders,
-      SUM(user_level.items_after_assignment) AS total_items,
+      SUM(user_level.orders_after_assignment) AS total_users_who_ordered,
       SUM(user_level.total_revenue) AS total_revenue
 FROM
 (SELECT test_events.test_id,
        test_events.test_assignment,
        test_events.user_id,
-       COUNT(DISTINCT (CASE
-                           WHEN orders.created_at > test_events.event_time THEN invoice_id
-                           ELSE NULL
-                       END)) AS orders_after_assignment,
-       COUNT(DISTINCT (CASE
-                           WHEN orders.created_at > test_events.event_time THEN line_item_id
-                           ELSE NULL
-                       END)) AS items_after_assignment,
+       MAX(CASE
+                           WHEN orders.created_at > test_events.event_time THEN 1
+                           ELSE 0
+                       END) AS orders_after_assignment,
        SUM((CASE
                 WHEN orders.created_at > test_events.event_time THEN price
                 ELSE 0
@@ -509,20 +536,42 @@ GROUP BY test_events.test_id,
          test_events.user_id) AS user_level
 GROUP BY user_level.test_id,
          user_level.test_assignment
+         
+test_id	  test_assignment	   no_of_users	   total_users_who_ordered	  total_revenue
+  4	            0	             7210	         1060	                   317624.2250000002
+  4	            1	             4680	         670	                    185803.2999999999
+  5	            0	             34420	        4977	                   1406593.229999996
+  5	            1	             34143	        5075	                   1415427.9999999912
+  6	            0	             21687	        3164	                   887280.655
+  6	            1	             21703	        3190	                   879542.6049999989
+  7	            0	             19376	        2521	                   701942.2349999995
+  7	            1	             19271	        2633	                   726171.0050000008
 
+10. Conducting AB tests on total number of users who ordered as 'business metrics' and finding out if the new variant creates any statistically significant results.
+-Confidence level is taken as 95%
+-Null hypothesis is there is no significant statistical difference between the control and treatment group behaviour
 
-test_id	test_assignment	no_of_users	     total_orders   total_items	total_revenue
-4	              0	           7210	       1163	       2889	       317624.2250000001
-4	              1	           4680	       731	       1828	       185803.29999999993
-5	              0	           34420	       5403	       13551	       1406593.2300000002
-5	              1	           34143	       5483	       13697	       1415427.9999999935
-6	              0	           21687	       3441	       8660	       887280.6550000014
-6	              1	           21703	       3499	       8689	       879542.6050000001
-7	              0	           19376	       2742	       6964	       701942.2349999994
-7	              1	           19271	       2866	       7034	       726171.005000001
+A. For Test id 4, 
+Control group - 1060 success out of 7210 users
+Treatment group - 670 success out of 4680 users
+the p value comes out to be 0.56 > 0.05, hence we fail to reject the null hypothesis and hence can not confidently say if the variant introduced caused any significant changes
 
+B. For Test id 5, 
+Control group - 4977 success out of 34420 users
+Treatment group - 5075 success out of 34143 users
+the p value comes out to be 0.13 > 0.05, hence we fail to reject the null hypothesis and hence can not confidently say if the variant introduced caused any significant changes
 
+with average improvement of -14%, hence we reject the null hypothesis and hence can confidently say the variant introduced caused significant
+changes. But -14% tells us that variant introduced infact reduces the user views and using the variant further will only pull down the user views and hence the variant should
+not be used.
 
-12. items views by user can be taken as an engagement metric and and AB test can be performed to find out if the test has been successful in engaging tr customers more
-or is the behavior of customers still the same.
-              
+C. For Test id 6, 
+Control group - 3164 success out of 21687 users
+Treatment group - 3190 success out of 21703 users
+the p value comes out to be 0.75 > 0.05, hence we fail to reject the null hypothesis and hence can not confidently say if the variant introduced caused any significant changes
+
+D. For Test id 7, 
+Control group - 2521 success out of 19376 users
+Treatment group - 2633 success out of 19271 users
+the p value comes out to be 0.059 > 0.05, hence we fail to reject the null hypothesis and hence can not confidently say if the variant introduced caused any significant changes
+    
