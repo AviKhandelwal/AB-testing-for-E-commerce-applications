@@ -1,42 +1,43 @@
-What is AB testing?
+What is A/B testing?
  
-AB testing is an application of a kind of statistics called hypothesis testing. The idea is that you start with a hypothesis like a new improvement to a website will cause 
-some metric to increase. Typically, this metric is tied directly to some business metrics like revenue or could simply be realted to engagement where we are trying if the
-new UI is more effective than the older one. So, we can prove or disprove a hypothes is about how user behavior changed. By looking at multiple metrics, we can interpret the
-results holistically to gain insight about the effects of the change.
+A/B testing is an application of a kind of statistics called hypothesis testing. The idea is that you start with a hypothesis like a new improvement to a website will cause 
+some metrics to increase. Typically, this metric is tied directly to some business metrics like revenue or could simply be related to engagement where we are trying to see
+if the new UI is more effective than the older one. So, we can prove or disprove a hypothesis about how user behavior changed. By looking at multiple metrics, we can interpret
+the results holistically to gain insight into the effects of the change.
 
-Below are some important steps followed during AB testing-
-1. Customers need to meet the eligibility critera for example they should be registered users or have made atleast one purchase in past
-2. A diversion point will be created which will be deciding whether they would be put in control or treatment group. Control group is where nothing is changed for the customers
-and the treatment group is where customers will be shown the new variant.
-3. Their activity is monitored and a null hyposthesis is adopted that states the new variant does not significantly change the user behavior, so the problem boils down to 
+Below are some important steps followed during A/B testing-
+1. Customers need to meet the eligibility criteria for example they should be registered users or have made at least one purchase in past.
+2. A diversion point will be created which will be deciding whether they would be put in the control or treatment group. The Control group is where nothing is changed for the 
+customers and the treatment group is where customers will be shown the new variant.
+3. Their activity is monitored and a null hypothesis is adopted that states the new variant does not significantly change the user behavior, so the problem boils down to 
 the one in hypothesis testing where we reject or fail to reject the null hypothesis.
 
-Some popular AB testing case studies-
+Some popular A/B testing case studies-
 
 A. User welcome email
 
 1. Old variant- Send standard welcome email
-2. New variant - Send welcome email with picture of top selling products
+2. New variant - Send welcome email with a picture of top-selling products
 3. Eligibility - User must have an account
-4. Diversion Point - When automated email is about to be sent
+4. Diversion Point - When the automated email is about to be sent
 5. Control group gets existing email and treatment group gets updated email
 6. Engagement metrics - email opens -> email clicks -> item views -> order completed
 7. Business metrics - total orders placed, revenue
 
-A. Push notification to mobile users
+B. Push notification to mobile users
 
 1. Old variant - No push notifications
-2. New variant - Push notifications about items in cart and not completed the order in past 24 hours
-3. Eligibility - User must have an account with valid email address
-4. Diversion Point - When automated push notification is about to be sent
-5. Control group gets no push notifications and treatment group gets personalised push notifications about items in cart
+2. New variant - Push notifications about items in the cart and not completed the order in the past 24 hours
+3. Eligibility - The user must have an account with the valid email address
+4. Diversion Point - When an automated push notification is about to be sent
+5. Control group gets no push notifications and the treatment group gets personalized push notifications about items in the cart
 6. Engagement metrics - push notification recieved -> mobile app visit -> item views - > order completed
 7. Business metrics - total orders placed, revenue
 
+
 SQL queries-
 
-1. Find out the total people who participated in AB testing?
+1. Find out the total people who participated in A/B testing?
 
 SELECT COUNT(DISTINCT user_id)
 FROM dsv1069.events
@@ -46,7 +47,7 @@ count
 97292
 
 
-2. How many AB tests have run?
+2. How many A/B tests have run?
 
 SELECT parameter_value
 FROM dsv1069.events
@@ -60,9 +61,9 @@ test_id
 6
 7
 
-4 AB tests are running as of now.
+Four A/B tests have run.
 
-3. On each day, how many people participate in any given AB tests?
+3. On each day, how many people participate in any given A/B tests?
 
 SELECT parameter_value AS test_id,
        DATE(event_time) AS day,
@@ -87,7 +88,7 @@ test_id		     day		              event_rows
 4	     2013-06-02 00:00:00  	     1073
 4	     2013-06-03 00:00:00  	     1070
 
-4. Finding out the start and end dates of the AB tests and see if any of them coincide?
+4. Finding out the start and end dates of the A/B tests and see if any of them coincide?
 
 SELECT test_id,
       min(day) AS event_started,
@@ -114,8 +115,8 @@ test_id	    event_started		            event_ended	       total_participation
 
 only tests 5,6 coincide whereas tests 4 and 7 run individually
 
-Structuring multiple concurrent AB tests - The only requirement is that the tests should be independent of one another, which means the effect on behaviour a test could have
-on a customer should not affect their behaviour on another AB test.
+Structuring multiple concurrent A/B tests - The only requirement is that the tests should be independent of one another, which means the effect on behaviour a test could have
+on a customer should not affect their behaviour on another A/B test.
 
 
 5. Compressing the information in events table to include test_id and test assignment in the same row.
@@ -223,11 +224,11 @@ WHERE test_assignment = '1' and (test_id = 5 OR test_id = 6)
 GROUP BY user_id) as user_with_assignments
 GROUP BY assignments
 
-assignments	count
-1		43086
-2		6380
+assignments	 count
+1		          43086
+2		          6380
 
-10. Finding out how many users participated in each AB test as part of control and treatment group
+7. Finding out how many users participated in each A/B test as part of control and treatment group
 
 SELECT test_id,
        test_assignment,
@@ -251,19 +252,21 @@ FROM
       ORDER BY event_id) assignments
 GROUP BY test_id,
 test_assignment 
-HAVING test_id IS NOT NULL
 
-test_id	test_assignment	count
-4	           0	          7210
-4	           1	          4680
-5	           0	          34420
-5	           1	          34143
-6	           0	          21687
-6	           1	          21703
-7	           0	          19376
-7	           1	          19271
+test_id	test_assignment	 count
+4	          0	           7210
+4	          1	           4680
+5	          0	           34420
+5	          1	           34143
+6	          0	           21687
+6	          1	           21703
+7	          0	           19376
+7	          1	           19271
+		                       69565
+                         
+The last row shows the total number of users who did not participate in any of the A/B tests.
 
-7. Compute a metric that measures whether a user created an order after their test assignment
+8. Compute a metric that measures whether a user created an order after their test assignment
 
 SELECT test_events.test_id,
        test_events.test_assignment,
@@ -313,7 +316,7 @@ test_id	test_assignment		user_id		orders_after_assignment_binary
 7		           0		         262305			0
 5		           1		         215646			1
            
-8. Creating a new item view user_level binary metric.
+9. Creating a new item view user_level binary metric.
 
 SELECT assignments.user_id,
        assignments.test_id,
@@ -373,7 +376,7 @@ user_id	    test_id	test_assignment	user_views_binary	user_views_binary_30d
 25454	       6	           1	              1	                  1
 
              
-9. Extending the same analysis from above but now doing it for all treatment groups as whole instead of user_level
+10. Extending the same analysis from above but now doing it for all treatment groups as whole instead of user_level
 
 SELECT user_level.test_id,
        user_level.test_assignment,
@@ -436,12 +439,8 @@ test_id	test_assignment	 total_user_views	  total_user_views_within_30_days
 7	             1	           10271                   237
            
 
-
-
-
-11.  Making a user_level metrics with the following metrics
+11.  Making a user_level metrics with the following-
 -- the number of orders/invoices
--- the number of items/line-items ordered
 -- the total revenue from the order after treatment
 
 SELECT test_events.test_id,
@@ -493,7 +492,7 @@ test_id	test_assignment	user_id	order_after_assignment	total_revenue
 5	            1	         81386	         1	                3534
 5	            0	         117506	        1	                3306
                 
-11. Extending the same analysis from above but now doing it for all treatment groups as whole instead of user_level
+12. Extending the same analysis from above but now doing it for all treatment groups as whole instead of user_level
 
 SELECT user_level.test_id,
       user_level.test_assignment,
@@ -547,9 +546,12 @@ test_id	  test_assignment	   no_of_users	   total_users_who_ordered	  total_reve
   7	            0	             19376	        2521	                   701942.2349999995
   7	            1	             19271	        2633	                   726171.0050000008
 
-10. Conducting AB tests on total number of users who ordered as 'business metrics' and finding out if the new variant creates any statistically significant results.
+
+13. Conducting A/B tests on total number of users who ordered as 'business metrics' and finding out if the new variant creates any statistically significant results.
 -Confidence level is taken as 95%
--Null hypothesis is there is no significant statistical difference between the control and treatment group behaviour
+-Null hypothesis states that there is no significant statistical difference between the control and treatment group behaviour.
+-A/B testing calculator used can be found on below link-
+https://thumbtack.github.io/abba/demo/abba.html
 
 A. For Test id 4, 
 Control group - 1060 success out of 7210 users
@@ -561,10 +563,6 @@ Control group - 4977 success out of 34420 users
 Treatment group - 5075 success out of 34143 users
 the p value comes out to be 0.13 > 0.05, hence we fail to reject the null hypothesis and hence can not confidently say if the variant introduced caused any significant changes
 
-with average improvement of -14%, hence we reject the null hypothesis and hence can confidently say the variant introduced caused significant
-changes. But -14% tells us that variant introduced infact reduces the user views and using the variant further will only pull down the user views and hence the variant should
-not be used.
-
 C. For Test id 6, 
 Control group - 3164 success out of 21687 users
 Treatment group - 3190 success out of 21703 users
@@ -574,4 +572,3 @@ D. For Test id 7,
 Control group - 2521 success out of 19376 users
 Treatment group - 2633 success out of 19271 users
 the p value comes out to be 0.059 > 0.05, hence we fail to reject the null hypothesis and hence can not confidently say if the variant introduced caused any significant changes
-    
