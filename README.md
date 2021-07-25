@@ -8,6 +8,12 @@ The project uses a dataset which tries to mimic an online e-commerce site. A dum
 
 2. The second part will end the proejct with AB testing where running some tests would help us decide if the change we are trying to introduce at our dummy company could yeild any statistically significant results.
 
+Below a pyramid is given that shows the hierarchy of tasks which happen in any data science project, the scope of this project is limited to data analysis and conducting
+important statistical tests like AB testing. The project builds on the foundations of SQL and inferencial statistics.
+
+![image](https://user-images.githubusercontent.com/71550473/126904474-d16dc7f4-442b-4525-8636-26714324074b.png)
+
+
 Below is a simple wireframe drawing of a website owned by a fictitious e-commerce company. We have some items which can be viewed and purchased via the users, in order to purchase an item a visitor must first create an account and be logged in and then add the item to their cart and then check out.
 
 ![image](https://user-images.githubusercontent.com/71550473/126879795-0057cefa-7183-44f3-b1ac-6c12a2009cc7.png)
@@ -75,3 +81,4 @@ View item table will be giving information about the viewing details of the item
 4.	User Id who viewed
 5.	Platform used for viewing
 6.	Parameter name and value
+
