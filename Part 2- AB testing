@@ -1,3 +1,42 @@
+What is AB testing?
+ 
+AB testing is an application of a kind of statistics called hypothesis testing. The idea is that you start with a hypothesis like a new improvement to a website will cause 
+some metric to increase. Typically, this metric is tied directly to some business metrics like revenue or could simply be realted to engagement where we are trying if the
+new UI is more effective than the older one. So, we can prove or disprove a hypothes is about how user behavior changed. By looking at multiple metrics, we can interpret the
+results holistically to gain insight about the effects of the change.
+
+Below are some important steps followed during AB testing-
+1. Customers need to meet the eligibility critera for example they should be registered users or have made atleast one purchase in past
+2. A diversion point will be created which will be deciding whether they would be put in control or treatment group. Control group is where nothing is changed for the customers
+and the treatment group is where customers will be shown the new variant.
+3. Their activity is monitored and a null hyposthesis is adopted that states the new variant does not significantly change the user behavior, so the problem boils down to 
+the one in hypothesis testing where we reject or fail to reject the null hypothesis.
+
+
+Some popular AB testing case studies-
+
+A. User welcome email
+
+1. Old variant- Send standard welcome email
+2. New variant - Send welcome email with picture of top selling products
+3. Eligibility - User must have an account
+4. Diversion Point - When automated email is about to be sent
+5. Control group gets existing email and treatment group gets updated email
+6. Engagement metrics - email opens -> email clicks -> item views -> order completed
+7. Business metrics - total orders placed, revenue
+
+A. Push notification to mobile users
+
+1. Old variant - No push notifications
+2. New variant - Push notifications about items in cart and not completed the order in past 24 hours
+3. Eligibility - User must have an account with valid email address
+4. Diversion Point - When automated push notification is about to be sent
+5. Control group gets no push notifications and treatment group gets personalised push notifications about items in cart
+6. Engagement metrics - push notification recieved -> mobile app visit -> item views - > order completed
+7. Business metrics - total orders placed, revenue
+
+SQL queries-
+
 1. Find out the total people who participated in AB testing?
 
 SELECT COUNT(DISTINCT user_id)
@@ -75,6 +114,9 @@ test_id	event_started		event_ended	       total_participation
 7	2016-09-16 00:00:00	       2016-12-04 00:00:00	38647
 
 only tests 5,6 coincide whereas tests 4 and 7 run individually
+
+Structuring multiple concurrent AB tests - The only requirement is that the tests should be independent of one another, which means the effect on behaviour a test could have
+on a customer should not affect their behaviour on another AB test.
 
 
 5. Compressing the information in events table to include test_id and test assignment in the same row.
@@ -358,7 +400,11 @@ test_id	test_assignment	total_views	views_within_30_days
 7	       0	                 38810	633
 7	       1	                 38180	603
 
-10.  Making a user_level metrics with the following metrics
+10. Conducting AB tests on views within 30 days as 'engagement metrics' and finding out if the new variant creates any statistically significant results
+
+
+
+11.  Making a user_level metrics with the following metrics
 -- the number of orders/invoices
 -- the number of items/line-items ordered
 -- the total revenue from the order after treatment
@@ -474,6 +520,7 @@ test_id	test_assignment	no_of_users	     total_orders   total_items	total_revenu
 6	              1	           21703	       3499	       8689	       879542.6050000001
 7	              0	           19376	       2742	       6964	       701942.2349999994
 7	              1	           19271	       2866	       7034	       726171.005000001
+
 
 
 12. items views by user can be taken as an engagement metric and and AB test can be performed to find out if the test has been successful in engaging tr customers more
