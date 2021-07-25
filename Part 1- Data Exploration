@@ -240,6 +240,18 @@ Result -
 	0002b1150042493c856b90abfc00ce2e	2017-10-31 20:56:57	239551	web		3675	shopping_cart
 	0002c6e5bf2145759b5aa8f2a5e2bfbb	2017-07-07 08:59:10	206123	android		511	item_page
 	0003078ab0964a72b93e32db30929567	2016-03-30 17:35:16	111792	web		2782	promo_email_click
+	
+
+This view-item table we want to build would depend on the events table being up to date. The moment new events come in, the view events table will become stale, meaning it 
+will not be up to date. But also if these update happens say nightly then it only makes sense to kick off the job or the task of updating the view-items table, after the 
+events table has been refreshed and then at last updating the most recently viewed item table in that order. So here's our pipeline. First, the events need to be updated,
+then the view-item events table, then the most recently viewed-item table. If I build out all these tables and schedule them to run in the proper order, I could say that I've 
+built a data pipeline with multiple dependencies. Sometimes the abbreviation ETL which stands for Extract Transform Load, is used to describe the steps happening under the hood
+during table creation. Sometimes the software that manages all of the scheduling is called an ETL System. 
+
+For view-item table-
+a. Dependencies upstream - Events table
+b. Dependencies downstream - Most_recently viewed items table
 
 
 14. Finding out on which days total customer views for all the items on ecommerce site exceeded 100?
